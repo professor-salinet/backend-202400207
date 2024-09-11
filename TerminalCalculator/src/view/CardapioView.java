@@ -16,7 +16,7 @@ public class CardapioView {
 
         pedidoCliente = scnInput.nextInt();
 
-        CardapioController.respostaParaCliente(pedidoCliente);
+        System.out.println(CardapioController.respostaParaCliente(pedidoCliente));
 
         scnInput.close();
     }
