@@ -37,12 +37,12 @@ public class DespertadorView {
             }
             System.out.println(String.format("Agora são: %d:%d:%d", horaAtual, minutoAtual, segundoAtual));
 
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-    
-                }
-            }, 1000, 1);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             System.out.print("\033[H\033[2J");  
             System.out.flush();
         }
