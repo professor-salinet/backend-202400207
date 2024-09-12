@@ -10,23 +10,9 @@ public class DespertadorController extends DespertadorView {
 
     public static String acaoDespertador(int opcaoUsuario) {
         String resposta = "";
-        Scanner scnAdiar = new Scanner(System.in);
-        int respostaAdiar;
         switch (opcaoUsuario) {
             case 1:
-                System.out.println("Digite o número da opção abaixo e tecle Enter:");
-                for (int a = 0; a < adiamentos.length; a++) {
-                    System.out.println(
-                        String.format(
-                            "[%d] >> adiar %d minutos", 
-                            a + 1, 
-                            adiamentos[a]
-                        )
-                    );
-                }
-                respostaAdiar = scnAdiar.nextInt();
-                adiar = adiamentos[respostaAdiar - 1];
-
+                mostrarOpcoesAdiamentos();
                 resposta = "Ok! Alarme adiado em: " + adiar + " minutos.";
                 minutoDespertar += adiar;
                 if (minutoDespertar > 59) {
@@ -35,15 +21,13 @@ public class DespertadorController extends DespertadorView {
                 break;
 
             case 2:
-                System.out.println("Ok! Alarme parado.");
-                System.exit(0);
+                sairDoSistema();
                 break;
 
             default:
                 resposta = "Opção inválida.";
                 break;
         }
-        scnAdiar.close();
         return resposta;
     }
 
