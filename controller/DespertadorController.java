@@ -12,11 +12,22 @@ public class DespertadorController extends DespertadorView {
         String resposta = "";
         switch (opcaoUsuario) {
             case 1:
-                mostrarOpcoesAdiamentos();
-                resposta = "Ok! Alarme adiado em: " + adiar + " minutos.";
-                minutoDespertar += adiar;
-                if (minutoDespertar > 59) {
-                    minutoDespertar = 59;
+                if (adiamentoAtual <= 3) {
+                    if (mostrarOpcoesAdiamentos()) {
+                        exibirAlarmeAdiado(adiar);
+                        if ((minutoDespertar + adiar) > 59) {
+                            horaDespertar++;
+                            if (horaDespertar > 23) {
+                                horaDespertar = 0;
+                            }
+                            minutoDespertar = (minutoDespertar + adiar) - 59;
+                        }
+                        adiamentoAtual++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    sairDoSistema();
                 }
                 break;
 

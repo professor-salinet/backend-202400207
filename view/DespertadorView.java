@@ -7,7 +7,9 @@ public class DespertadorView {
     public static int minutoDespertar;
     public static int segundoDespertar;
     public static int adiar = 10; // minutos
-    public static int[] adiamentos = {5, 10, 15};
+    public static int[] adiamentos = {1, 5, 10, 15};
+    public static int qtdAdiamento = 3;
+    public static int adiamentoAtual = 0;
 
     public static Date date = null;
     public static Calendar calendar = null;
@@ -27,6 +29,7 @@ public class DespertadorView {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public static Scanner scnInput = new Scanner(System.in);
+    public static Scanner scnInputString = new Scanner(System.in);
 
     public static void main(String[] args) {
         boolean sair = false;
@@ -96,6 +99,7 @@ public class DespertadorView {
             System.out.flush();
         }
         scnInput.close();
+        scnInputString.close();
     }
 
     public static void contador(int milisseg) {
@@ -122,8 +126,7 @@ public class DespertadorView {
         System.exit(0);
     }
 
-    public static void mostrarOpcoesAdiamentos() {
-        int respostaAdiar;
+    public static boolean mostrarOpcoesAdiamentos() {
         System.out.println("Digite o número da opção abaixo e tecle Enter:");
         for (int a = 0; a < adiamentos.length; a++) {
             System.out.println(
@@ -134,7 +137,18 @@ public class DespertadorView {
                 )
             );
         }
-        respostaAdiar = scnInput.nextInt();
-        adiar = adiamentos[respostaAdiar - 1];
+        int respostaUsuario = scnInput.nextInt();
+        if (respostaUsuario <= adiamentos.length) {
+            adiar = adiamentos[respostaUsuario - 1];
+            return true;
+        } else {
+            System.out.println("Ops! Opção inválida, tente novamente.");
+            return false;
+        }
+    }
+
+    public static void exibirAlarmeAdiado(int adiamentoInteger) {
+        System.out.println("Ok! Despertador adiado em: " + adiamentoInteger + " minutos.");
+        System.out.println("Você poderá adiar mais " + (qtdAdiamento - adiamentoAtual) + " vezes.");
     }
 }
