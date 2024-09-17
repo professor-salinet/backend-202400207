@@ -8,38 +8,38 @@ public class DespertadorController extends DespertadorView {
         return DespertadorModel.mostrarOpcoes();
     }
 
-    public static String acaoDespertador(int opcaoUsuario) {
-        String resposta = "";
-        switch (opcaoUsuario) {
-            case 1:
-                if (adiamentoAtual <= 3) {
+    public static void acaoDespertador(int opcaoUsuario) {
+        if (adiamentoAtual < 3) {
+            switch (opcaoUsuario) {
+                case 1:
                     if (mostrarOpcoesAdiamentos()) {
-                        exibirAlarmeAdiado(adiar);
-                        if ((minutoDespertar + adiar) > 59) {
+                        if ((minutoAtual + adiar) > 59) {
                             horaDespertar++;
                             if (horaDespertar > 23) {
                                 horaDespertar = 0;
                             }
-                            minutoDespertar = (minutoDespertar + adiar) - 59;
+                            minutoDespertar = (minutoAtual + adiar) - 59;
+                        } else {
+                            minutoDespertar = minutoAtual + adiar;
                         }
                         adiamentoAtual++;
+                        exibirAlarmeAdiado(adiar);
                     } else {
                         break;
                     }
-                } else {
+                    break;
+
+                case 2:
                     sairDoSistema();
-                }
-                break;
+                    break;
 
-            case 2:
-                sairDoSistema();
-                break;
-
-            default:
-                resposta = "Opção inválida.";
-                break;
+                default:
+                    mostrarOpcaoInvalida();
+                    break;
+            }
+        } else {
+            sairDoSistema();
         }
-        return resposta;
     }
 
     public static void getHMS() {
