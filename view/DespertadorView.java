@@ -1,5 +1,6 @@
 package view;
 import java.util.*;
+
 import controller.*;
 
 public class DespertadorView {
@@ -17,8 +18,13 @@ public class DespertadorView {
     public static int minutoAtual;
     public static int segundoAtual;
 
+    public static int horaRestante;
+    public static int minutoRestante;
+    public static int segundoRestante;
+
     public static int maxHora = 23;
     public static int maxMinuto = 59;
+    public static int maxSegundo = 59;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -56,23 +62,9 @@ public class DespertadorView {
         while (sair == false) {
             DespertadorController.getHMS();
 
-            System.out.println(
-                String.format(
-                    "Agora são: %s%d:%d:%d%s. O próximo alarme irá despertar às %s%d:%d%s. Adiado %s%d%s vez(es).", 
-                    ANSI_YELLOW,
-                    horaAtual, 
-                    minutoAtual, 
-                    segundoAtual,
-                    ANSI_RESET, 
-                    ANSI_RED,
-                    horaDespertar, 
-                    minutoDespertar, 
-                    ANSI_RESET,
-                    ANSI_GREEN,
-                    adiamentoAtual,
-                    ANSI_RESET
-                )
-            );
+            mostrarHorarioAtual();
+            mostrarTempoRestante();
+            mostrarAdiamentos();
 
             if (horaAtual >= horaDespertar) {
                 if (minutoAtual >= minutoDespertar) {
@@ -101,12 +93,60 @@ public class DespertadorView {
 
 
             contador(1000);
-
-            System.out.print("\033[H\033[2J");  
-            System.out.flush();
+            limparTela();
         }
         scnInput.close();
         scnInputString.close();
+    }
+
+    public static void limparTela() {
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();
+    }
+
+    public static void mostrarHorarioAtual() {
+        System.out.println(
+            String.format(
+                "Agora são: %s%d:%d:%d%s.", 
+                ANSI_YELLOW, 
+                horaAtual, 
+                minutoAtual, 
+                segundoAtual,
+                ANSI_RESET
+            )
+        );
+    }
+
+    public static void mostrarAdiamentos() {
+        System.out.println(
+            String.format(
+                "Adiado %s%d%s vez(es).",
+                ANSI_GREEN,
+                adiamentoAtual,
+                ANSI_RESET
+            )
+        );
+    }
+
+    public static void mostrarTempoRestante() {
+        System.out.println(
+            String.format(
+                "Falta(m) %s%d%s horas, %s%d%s minutos e %s%d%s segundos para o próximo alarme que irá despertar às %s%d:%d%s.",
+                ANSI_CYAN,
+                horaRestante,
+                ANSI_RESET, 
+                ANSI_CYAN,
+                minutoRestante,
+                ANSI_RESET, 
+                ANSI_CYAN,
+                segundoRestante,
+                ANSI_RESET,
+                ANSI_RED,
+                horaDespertar, 
+                minutoDespertar, 
+                ANSI_RESET
+            )
+        );
     }
 
     public static void mostrarOpcaoInvalida() {
@@ -128,6 +168,8 @@ public class DespertadorView {
     }
 
     public static void configurarHora() {
+        limparTela();
+        mostrarHorarioAtual();
         System.out.println("Digite abaixo a hora que você deseja configurar o despertador e tecle Enter:");
         horaDespertar = scnInput.nextInt();
         if (horaDespertar < horaAtual) {
@@ -140,6 +182,8 @@ public class DespertadorView {
     }
 
     public static void configurarMinuto() {
+        limparTela();
+        mostrarHorarioAtual();
         System.out.println("Digite abaixo o minuto que você deseja configurar o despertador e tecle Enter:");
         minutoDespertar = scnInput.nextInt();
         if (horaDespertar == horaAtual) {
