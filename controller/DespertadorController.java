@@ -50,24 +50,9 @@ public class DespertadorController extends DespertadorView {
         minutoAtual = calendar.get(Calendar.MINUTE);
         segundoAtual = calendar.get(Calendar.SECOND);
 
-        if (horaDespertar > 0 && minutoDespertar > 0) {
-            // horaRestante = horaDespertar - horaAtual;
-            // if (horaRestante > 0 && minutoDespertar <= minutoAtual) {
-            //     horaRestante--;
-            // }
-
-            // minutoRestante = (minutoDespertar - minutoAtual) - 1;
-            // if (minutoRestante <= 0) {
-            //     minutoRestante = ((maxMinuto - minutoAtual) + minutoDespertar) - 1;
-            // }
-
-            // segundoRestante = (maxSegundo - segundoAtual) + 1;
-            // if (segundoRestante > maxSegundo) {
-            //     segundoRestante = maxSegundo;
-            // }
-
+        if (horaDespertar >= 0 && minutoDespertar >= 0) {
             int[] tempoInicial = {horaAtual, minutoAtual, segundoAtual};
-            int[] tempoFinal = {horaDespertar, minutoDespertar, 60};
+            int[] tempoFinal = {horaDespertar, minutoDespertar};
 
             int[] tempoRestante = calcularTempoRestante(tempoInicial, tempoFinal);
 
@@ -78,38 +63,35 @@ public class DespertadorController extends DespertadorView {
     }
 
     public static int[] calcularTempoRestante(int[] tempoInicial, int[] tempoFinal) {
-        int maxHoras = 24;
         int maxMinutos = 60;
         int maxSegundos = 60;
 
-        int totalHorasPorDia = maxHoras;
-        int totalMinutosPorDia = totalHorasPorDia * maxMinutos;
-        int totalSegundosPorDia = totalMinutosPorDia * maxSegundos;
+        int horaInicial = tempoInicial[0];
+        int minutoInicial = tempoInicial[1];
+        int segundoInicial = tempoInicial[2];
 
-        int[] tempoRestante = {0,0,0}; // hora, minuto, segundo
+        int horaFinal = tempoFinal[0];
+        int minutoFinal = tempoFinal[1];
 
-        tempoRestante[0] = tempoFinal[0] - tempoInicial[0]; // horas restantes
-        tempoRestante[1] = (tempoFinal[1] - tempoInicial[1]) - 1; // minutos restantes
-        tempoRestante[2] = tempoFinal[2] - tempoInicial[2]; // segundos restantes
+        System.out.println("minutoFinal: " + minutoFinal);
 
-        // validador de hora
-        if (tempoRestante[0] > 0 && tempoFinal[1] <= tempoInicial[1]) {
-            tempoRestante[0]--;
+        int horaRestante = horaFinal - horaInicial;
+        int minutoRestante = (minutoFinal - minutoInicial) - 1;
+        int segundoRestante = maxSegundos - segundoInicial;
+
+        if (horaRestante > 0 && minutoFinal <= minutoInicial) {
+            horaRestante--;
         }
 
-        // validador de minuto
-        if (tempoRestante[1] < 0) {
-            tempoRestante[1] = ((maxMinutos - tempoInicial[1]) + tempoFinal[1]) - 1;
+        if (minutoRestante < 0) {
+            minutoRestante = ((maxMinutos - minutoInicial) + minutoFinal) - 1;
         }
 
-        // validador de segundo
-        if (tempoRestante[2] > maxSegundos) {
-            tempoRestante[2] = maxSegundos;
+        if (segundoRestante > maxSegundos) {
+            segundoRestante = maxSegundos;
         }
 
-        // System.out.println("horas restantes depois: " + tempoRestante[0]);
-        // System.out.println("minutos restantes depois: " + tempoRestante[1]);
-        // System.out.println("segundos restantes depois: " + tempoRestante[2]);
+        int[] tempoRestante = {horaRestante, minutoRestante, segundoRestante};
         return tempoRestante;
     }
 }
