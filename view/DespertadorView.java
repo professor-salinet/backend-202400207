@@ -1,5 +1,7 @@
 package view;
+
 import java.util.*;
+import javax.sound.sampled.*;
 
 import controller.*;
 
@@ -69,6 +71,7 @@ public class DespertadorView {
             if (horaAtual >= horaDespertar) {
                 if (minutoAtual >= minutoDespertar) {
                     if (podeAdiar()) {
+                        playSound("alarm-clock.wav");
                         System.out.println("Acorda, seu despertador está chamando.");
                         System.out.println("Digite um número abaixo das seguintes opções:");
                         String[] opcoes = DespertadorController.verOpcoes();
@@ -248,5 +251,23 @@ public class DespertadorView {
     public static void exibirAlarmeAdiado(int adiamentoInteger) {
         System.out.println("Ok! Despertador adiado em: " + adiamentoInteger + " minutos.");
         System.out.println("Você poderá adiar mais " + (qtdAdiamento - adiamentoAtual) + " vezes.");
+    }
+
+    public static synchronized void playSound(final String waveFile) {
+        new Thread(new Runnable() {
+            // The wrapper thread is unnecessary, unless it blocks on the
+            // Clip finishing; see comments.
+            public void run() {
+                try {
+                    Clip clip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                            DespertadorView.class.getResourceAsStream("./" + waveFile));
+                    clip.open(inputStream);
+                    clip.start();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
     }
 }
