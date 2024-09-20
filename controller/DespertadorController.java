@@ -86,23 +86,11 @@ public class DespertadorController extends DespertadorView {
         int totalMinutosPorDia = totalHorasPorDia * maxMinutos;
         int totalSegundosPorDia = totalMinutosPorDia * maxSegundos;
 
-        int horaInicial = tempoInicial[0];
-        int minutoInicial = tempoInicial[1];
-        int segundoInicial = tempoInicial[2];
-
-        int horaFinal = tempoFinal[0];
-        int minutoFinal = tempoFinal[1];
-        int segundoFinal = tempoFinal[2];
-
-        int[] tempoRestante = {0,0,0};
+        int[] tempoRestante = {0,0,0}; // hora, minuto, segundo
 
         tempoRestante[0] = tempoFinal[0] - tempoInicial[0]; // horas restantes
         tempoRestante[1] = (tempoFinal[1] - tempoInicial[1]) - 1; // minutos restantes
         tempoRestante[2] = tempoFinal[2] - tempoInicial[2]; // segundos restantes
-
-        // System.out.println("horas restantes antes: " + tempoRestante[0]);
-        // System.out.println("minutos restantes antes: " + tempoRestante[1]);
-        // System.out.println("segundos restantes antes: " + tempoRestante[2]);
 
         // validador de hora
         if (tempoRestante[0] > 0 && tempoFinal[1] <= tempoInicial[1]) {
@@ -111,7 +99,7 @@ public class DespertadorController extends DespertadorView {
 
         // validador de minuto
         if (tempoRestante[1] < 0) {
-            tempoRestante[1] = ((maxMinutos - minutoInicial) + minutoFinal) - 1;
+            tempoRestante[1] = ((maxMinutos - tempoInicial[1]) + tempoFinal[1]) - 1;
         }
 
         // validador de segundo
