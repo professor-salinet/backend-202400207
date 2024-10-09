@@ -1,74 +1,125 @@
 package view;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
 import javax.swing.*;
-
 import controller.*;
-// import model.MySQLConnectorModel;
 
 public class NovoCadastroView extends JFrame {
-    private final JLabel nomeJLabel = new JLabel("Digite um nome:", SwingConstants.RIGHT);
+    public static NovoCadastroView appNovoCadastro = null;
+
+    public final JLabel nomeJLabel = new JLabel("Digite um nome:", SwingConstants.RIGHT);
     public static final JTextField nomeJTextField = new JTextField();
 
-    private final JLabel emailJLabel = new JLabel("Digite um email:", SwingConstants.RIGHT);
+    public final JLabel emailJLabel = new JLabel("Digite um email:", SwingConstants.RIGHT);
     public static final JTextField emailJTextField = new JTextField();
 
-    private final JLabel senhaJLabel = new JLabel("Digite uma senha:", SwingConstants.RIGHT);
+    public final JLabel senhaJLabel = new JLabel("Digite uma senha:", SwingConstants.RIGHT);
     public static final JPasswordField senhaJPasswordField = new JPasswordField();
 
-    private final JButton cadastrarJButton = new JButton("Cadastrar");
+    public static String txtFoto = "Sua foto aqui";
+    public static JLabel lblImg = new JLabel(txtFoto);
+    public static final JButton btnFoto = new JButton("Selecionar arquivo");
+
+    public final JButton cadastrarJButton = new JButton("Cadastrar");
 
     public static final JLabel notificacaoJLabel = new JLabel("Notificações...", SwingConstants.CENTER);
 
+    public static boolean propriaTela = false;
+
     public NovoCadastroView() {
         super("Novo Cadastro");
-        setLayout(new GridLayout(5,1,5,5));
+        setLayout(new GridLayout(6,1,5,5));
 
-        JPanel linha1 = new JPanel(new GridLayout(1, 2, 5, 5));
+        JPanel linha_nome = new JPanel(new GridLayout(1, 2, 5, 5));
 
-        JPanel linha2 = new JPanel(new GridLayout(1, 2, 5, 5));
+        linha_nome.add(nomeJLabel);
+        linha_nome.add(nomeJTextField);
+        add(linha_nome);
 
-        JPanel linha3 = new JPanel(new GridLayout(1, 2, 5, 5));
+        JPanel linha_email = new JPanel(new GridLayout(1, 2, 5, 5));
 
-        JPanel linha4 = new JPanel(new GridLayout(1, 1, 5, 5));
+        linha_email.add(emailJLabel);
+        linha_email.add(emailJTextField);
+        add(linha_email);
 
-        JPanel linha5 = new JPanel(new GridLayout(1, 1, 5, 5));
+        JPanel linha_senha = new JPanel(new GridLayout(1, 2, 5, 5));
 
-        cadastrarJButton.addActionListener(
+        linha_senha.add(senhaJLabel);
+        linha_senha.add(senhaJPasswordField);
+        add(linha_senha);
+
+        JPanel linha_btnFoto = new JPanel(new GridLayout(1, 2, 5, 5));
+
+        linha_btnFoto.add(lblImg);
+        linha_btnFoto.add(btnFoto);
+        add(linha_btnFoto);
+
+        JPanel linha_btnCadastrar = new JPanel(new GridLayout(1, 1, 5, 5));
+
+        linha_btnCadastrar.add(cadastrarJButton);
+        add(linha_btnCadastrar);
+
+        JPanel linha_notificacao = new JPanel(new GridLayout(1, 1, 5, 5));
+
+        linha_notificacao.add(notificacaoJLabel);
+        add(linha_notificacao);
+
+        btnFoto.addActionListener(
             new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
-                    NovoCadastroController.novoCadastroController();
+                    NovoCadastroController.selecionarArquivoController();
                 }
             }
         );
 
-        linha1.add(nomeJLabel);
-        linha1.add(nomeJTextField);
-        add(linha1);
+        cadastrarJButton.addActionListener(
+            new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    if (nomeJTextField.getText().trim().length() <= 0) {
+                        notificacaoJLabel.setText("Ops! Digite um nome para prosseguir e tente novamente.");
+                        nomeJTextField.requestFocus();
+                        return;
+                    }
+                    if (emailJTextField.getText().trim().length() <= 0) {
+                        notificacaoJLabel.setText("Ops! Digite um email para prosseguir e tente novamente.");
+                        emailJTextField.requestFocus();
+                        return;
+                    }
+                    if (String.valueOf(senhaJPasswordField.getPassword()).trim().length() <= 0) {
+                        notificacaoJLabel.setText("Ops! Digite uma senha para prosseguir e tente novamente.");
+                        senhaJPasswordField.requestFocus();
+                        return;
+                    }
+                    if (NovoCadastroController.fileFullName.equals("")) {
+                        int respostaUsuario = JOptionPane.showConfirmDialog(null, "Ops! Não foi selecionado um arquivo para foto no cadastro. Deseja continuar?");
+                        System.out.println("respostaUsuario: " + respostaUsuario);
+                        if (respostaUsuario < 1) {
+                            NovoCadastroController.novoCadastroController();
+                        } else {
+                            notificacaoJLabel.setText("Clique em: \"Selecionar arquivo\" para escolher uma foto.");
+                        }
+                    }
+                }
+            }
+        );
 
-        linha2.add(emailJLabel);
-        linha2.add(emailJTextField);
-        add(linha2);
-
-        linha3.add(senhaJLabel);
-        linha3.add(senhaJPasswordField);
-        add(linha3);
-
-        linha4.add(cadastrarJButton);
-        add(linha4);
-
-        linha5.add(notificacaoJLabel);
-        add(linha5);
-
+        ImageIcon img = new ImageIcon("./img/logo-perfect-burguer.png");
+        setIconImage(img.getImage());
         setSize(500, 200);
         setVisible(true);
     }
 
-    public static NovoCadastroView appNovoCadastro = null;
     public static void main(String[] args) {
         appNovoCadastro = new NovoCadastroView();
         appNovoCadastro.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        propriaTela = true;
+        appNovoCadastro.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                if (NovoCadastroController.fileFullName.equals("") == false) {
+                    NovoCadastroController.removerArquivo();
+                }
+            }
+        });
     }
 }
 
