@@ -29,7 +29,7 @@ public class NovoCadastroController extends NovoCadastroView {
     }
 
     public static void novoCadastroController() {
-        NovoCadastroModel.novoCadastro(nomeJTextField.getText(), emailJTextField.getText(), String.valueOf(senhaJPasswordField.getPassword()));
+        NovoCadastroModel.novoCadastro(nomeJTextField.getText().trim(), emailJTextField.getText().trim(), String.valueOf(senhaJPasswordField.getPassword()).trim());
     }
 
     public static void exibirMenu() {
@@ -50,5 +50,17 @@ public class NovoCadastroController extends NovoCadastroView {
 
     public static void removerArquivo() {
         NovoCadastroModel.removerArquivoModel(fileFullPath);
+    }
+
+    public static void limparCampos() {
+        nomeJTextField.setText("");
+        emailJTextField.setText("");
+        senhaJPasswordField.setText("");
+        lblImg.setIcon(definirFoto("avatar.png"));
+    }
+
+    public static ImageIcon definirFoto(String foto) {
+        ImageIcon imageIcon = new ImageIcon(new ImageIcon(System.getProperty("user.dir") + "\\src\\view\\img\\" + foto).getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+        return imageIcon;
     }
 }

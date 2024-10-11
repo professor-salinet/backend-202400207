@@ -13,7 +13,7 @@ public class MySQLConnectorModel {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
             conn = DriverManager.getConnection(mysqlUrl);
-            System.out.println("Conexão realizada com sucesso!");
+            // System.out.println("Conexão realizada com sucesso!");
         } catch (Exception e) {
             System.err.println("Ops! Algo de errado não está certo com a conexão com o banco de dados MySQL! Mensagem do servidor: " + e);
         }

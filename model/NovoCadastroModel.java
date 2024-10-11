@@ -32,6 +32,7 @@ public class NovoCadastroModel extends NovoCadastroController {
                 notificarUsuario("Cadastro realizado com sucesso!");
                 NovoCadastroController.fileFullName = "";
                 NovoCadastroController.fileFullPath = "";
+                NovoCadastroController.limparCampos();
 
                 if (NovoCadastroController.propriaTela == false) {
                     exibirMenu();

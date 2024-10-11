@@ -16,8 +16,7 @@ public class NovoCadastroView extends JFrame {
     public final JLabel senhaJLabel = new JLabel("Digite uma senha:", SwingConstants.RIGHT);
     public static final JPasswordField senhaJPasswordField = new JPasswordField();
 
-    public static String txtFoto = "Sua foto aqui";
-    public static JLabel lblImg = new JLabel(txtFoto);
+    public static JLabel lblImg = new JLabel("", SwingConstants.CENTER);
     public static final JButton btnFoto = new JButton("Selecionar arquivo");
 
     public final JButton cadastrarJButton = new JButton("Cadastrar");
@@ -26,9 +25,11 @@ public class NovoCadastroView extends JFrame {
 
     public static boolean propriaTela = false;
 
+    public final String logoFullPath = System.getProperty("user.dir") + "\\src\\view\\img\\logo-perfect-burguer.jpg";
+
     public NovoCadastroView() {
         super("Novo Cadastro");
-        setLayout(new GridLayout(6,1,5,5));
+        setLayout(new GridLayout(7,1,5,5));
 
         JPanel linha_nome = new JPanel(new GridLayout(1, 2, 5, 5));
 
@@ -48,9 +49,13 @@ public class NovoCadastroView extends JFrame {
         linha_senha.add(senhaJPasswordField);
         add(linha_senha);
 
-        JPanel linha_btnFoto = new JPanel(new GridLayout(1, 2, 5, 5));
+        JPanel linha_Foto = new JPanel(new GridLayout(1, 1, 5, 5));
 
-        linha_btnFoto.add(lblImg);
+        lblImg.setIcon(NovoCadastroController.definirFoto("avatar.png"));
+        linha_Foto.add(lblImg);
+        add(linha_Foto);
+
+        JPanel linha_btnFoto = new JPanel(new GridLayout(1, 1, 5, 5));
         linha_btnFoto.add(btnFoto);
         add(linha_btnFoto);
 
@@ -98,12 +103,14 @@ public class NovoCadastroView extends JFrame {
                         } else {
                             notificacaoJLabel.setText("Clique em: \"Selecionar arquivo\" para escolher uma foto.");
                         }
+                    } else {
+                        NovoCadastroController.novoCadastroController();
                     }
                 }
             }
         );
 
-        ImageIcon img = new ImageIcon("./img/logo-perfect-burguer.png");
+        ImageIcon img = new ImageIcon(logoFullPath);
         setIconImage(img.getImage());
         setSize(500, 200);
         setVisible(true);
